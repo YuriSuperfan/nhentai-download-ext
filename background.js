@@ -19,45 +19,11 @@ function updateLink(url, newNumber) {
 }
 
 async function askDownload(url, galleryId = "unknown") {
-    const galleryCdnId = url.split("/")[4];
-    const numberExt = url.split("/")[5];
-
-    const tabs = await chrome.tabs.query({url: `${url.split(galleryCdnId)[0]}${galleryCdnId}/*`});
-    if (tabs.length > 0) {
-        try {
-            chrome.tabs.sendMessage(tabs[0].id, {
-                action: 'download',
-                url: url,
-                filename: `${galleryId}_${numberExt}`
-            });
-        } catch {
-            console.log("Using existing tab failed, trying with new one");
-            const newTab = await chrome.tabs.create({url, active: false});
-            chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
-                if (tabId === newTab.id && info.status === 'complete') {
-                    chrome.tabs.onUpdated.removeListener(listener);
-                    chrome.tabs.sendMessage(tabId, {
-                        action: 'download',
-                        url: url,
-                        filename: `${galleryId}_${numberExt}`
-                    });
-                }
-            });
-        }
-    } else {
-        console.log("No tab found, creating new tab");
-        const newTab = await chrome.tabs.create({url, active: false});
-        chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
-            if (tabId === newTab.id && info.status === 'complete') {
-                chrome.tabs.onUpdated.removeListener(listener);
-                chrome.tabs.sendMessage(tabId, {
-                    action: 'download',
-                    url: url,
-                    filename: `${galleryId}_${numberExt}`
-                });
-            }
-        });
-    }
+    chrome.downloads.download({
+        url: url,
+        filename: `${galleryId}/${galleryId}_${url.split("/")[5]}`,
+        conflictAction: galleryId === "unknown" ? "uniquify" : "overwrite"
+    })
 }
 
 async function register(baseUrl, galleryId, start = 1) {
