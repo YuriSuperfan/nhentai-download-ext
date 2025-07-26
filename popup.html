@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NHentai Helper</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            min-width: 250px;
+            padding: 16px;
+        }
+
+        input, button {
+            width: 100%;
+            margin: 8px 0;
+            padding: 8px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<h2>NHentai Download</h2>
+
+<input type="text" id="galleryId" placeholder="Enter gallery ID">
+<button id="startDownload">Start Download</button>
+
+<button id="clearStorage">Clear Storage</button>
+
+<h3>Current Queue</h3>
+<ul id="queueList" style="font-size: 14px; padding-left: 20px;"></ul>
+
+<div id="status" style="margin-top: 10px; font-size: 12px;"></div>
+
+<script src="popup.js"></script>
+</body>
+</html>
