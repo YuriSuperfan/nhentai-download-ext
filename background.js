@@ -42,13 +42,13 @@ async function checkStartDownload() {
     const {currentUrl} = await chrome.storage.local.get(['currentUrl']);
     if (currentUrl) {
         console.log("Gallery download already in progress");
-        return;
+        return "Gallery download already in progress";
     }
 
     const {downloadQueue = []} = await chrome.storage.local.get('downloadQueue');
     if (downloadQueue.length === 0) {
         console.log("No gallery to download");
-        return;
+        return "No gallery to download";
     }
 
     const baseUrl = downloadQueue[0].baseUrl;
@@ -58,11 +58,9 @@ async function checkStartDownload() {
 
     if (!(await checkPage(updateLink(baseUrl, pageNumber)))) {
         console.log(`Image not found at ${baseUrl}, stopping gallery '${galleryId}'.`);
-        await checkStartDownload();
-        return;
+        return await checkStartDownload();
     }
 
-    console.log(`Starting download for gallery '${galleryId}'`);
     await chrome.storage.local.set({
         currentUrl: baseUrl,
         galleryId,
@@ -70,6 +68,8 @@ async function checkStartDownload() {
         downloadQueue
     });
     await askDownload(updateLink(baseUrl, pageNumber), galleryId);
+    console.log(`Starting download for gallery '${galleryId}'`);
+    return `Starting download for gallery ${galleryId}`;
 }
 
 chrome.downloads.onChanged.addListener(async (delta) => {
@@ -122,9 +122,15 @@ chrome.downloads.onChanged.addListener(async (delta) => {
     await askDownload(nextUrl, galleryId);
 });
 
-chrome.runtime.onMessage.addListener(async (message) => {
+chrome.runtime.onMessage.addListener( (message, sender, sendResponse) => {
     if (message.action === "startDownload") {
-        await register(message.url, message.galleryId);
-        await checkStartDownload();
+        register(message.url, message.galleryId).then(checkStartDownload);
+    }
+    if (message.action === "checkDownloads") {
+        checkStartDownload().then((res) => {
+            sendResponse(res);
+        });
+        return true;
+
     }
 });

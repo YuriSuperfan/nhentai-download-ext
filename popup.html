@@ -2,34 +2,31 @@
 <html lang="en">
 <head>
     <title>NHentai Helper</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            min-width: 250px;
-            padding: 16px;
-        }
-
-        input, button {
-            width: 100%;
-            margin: 8px 0;
-            padding: 8px;
-            font-size: 14px;
-        }
-    </style>
+    <link rel="stylesheet" href="popup.css"/>
+    <script src="popup.js" defer></script>
 </head>
 <body>
-<h2>NHentai Download</h2>
+<div id="title" class="subsection">
+    <img src="icons/icon32.png" alt="nhentai download icon">
+    <h2>nhentai Download</h2>
+</div>
 
-<input type="text" id="galleryId" placeholder="Enter gallery ID">
-<button id="startDownload">Start Download</button>
+<div id="download-area" class="subsection">
+    <h3>Download a gallery</h3>
+    <div id="input-area">
+        <input type="text" id="galleryId" placeholder="ID" maxlength="6">
+        <button id="startDownload">Download</button>
+    </div>
+</div>
 
-<button id="clearStorage">Clear Storage</button>
+<div id="queue-area" class="subsection">
+    <h3>Current Queue</h3>
+    <ul id="queueList"></ul>
+</div>
 
-<h3>Current Queue</h3>
-<ul id="queueList" style="font-size: 14px; padding-left: 20px;"></ul>
-
-<div id="status" style="margin-top: 10px; font-size: 12px;"></div>
-
-<script src="popup.js"></script>
+<div id="action-area" class="subsection">
+    <button id="clearStorage">Clear Queue</button>
+    <button id="checkDownloads">Check Queue</button>
+</div>
 </body>
 </html>

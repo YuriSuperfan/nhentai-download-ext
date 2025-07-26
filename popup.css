@@ -1,0 +1,109 @@
+body {
+    width: 250px;
+    padding: 6px;
+    border: 0;
+    background-color: rgb(13, 13, 13);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    color: white;
+
+    h3, p {
+        margin: 0;
+    }
+
+    button {
+        background-color: rgb(237, 37, 83);
+        color: white;
+        padding: 5px 10px;
+        border: 0;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        cursor: pointer;
+    }
+
+    .subsection {
+        background-color: rgb(31, 31, 31);
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    #title {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+
+        img {
+            width: 32px;
+            height: 32px;
+            border-radius: 2px;
+        }
+
+        h2 {
+            margin: 0;
+            color: rgb(237, 37, 83);
+        }
+    }
+
+    #download-area {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        background-color: rgb(31, 31, 31);
+
+        #input-area {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            gap: 10px;
+            width: 100%;
+
+            input#galleryId {
+                width: calc(79px - 20px);
+                border: 0;
+                padding: 8px 10px;
+            }
+
+            button#startDownload {
+                width: fit-content;
+            }
+        }
+    }
+
+    #action-area {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 10px;
+
+        button {
+            width: calc(100% - 30px);
+        }
+    }
+
+    #queue-area {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 10px;
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+    }
+
+    #status-area {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+}

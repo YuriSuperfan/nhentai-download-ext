@@ -1,6 +1,11 @@
 document.getElementById("clearStorage").addEventListener("click", async () => {
     await chrome.storage.local.clear();
-    setStatus("Storage cleared");
+    await loadQueue();
+    setStatus("Queue cleared");
+});
+
+document.getElementById("checkDownloads").addEventListener("click", async () => {
+    setStatus(await chrome.runtime.sendMessage({action: "checkDownloads"}));
 });
 
 document.getElementById("startDownload").addEventListener("click", async () => {
@@ -14,7 +19,7 @@ document.getElementById("startDownload").addEventListener("click", async () => {
     const firstPageUrl = `https://nhentai.net/g/${galleryId}/1`;
 
     try {
-        const response = await fetch(firstPageUrl, { method: 'GET' });
+        const response = await fetch(firstPageUrl, {method: 'GET'});
 
         if (!response.ok) {
             setStatus("Gallery not found");
@@ -31,7 +36,7 @@ document.getElementById("startDownload").addEventListener("click", async () => {
             return;
         }
 
-        chrome.runtime.sendMessage({
+        await chrome.runtime.sendMessage({
             action: "startDownload",
             url: imgTag.src,
             galleryId: galleryId
@@ -46,11 +51,20 @@ document.getElementById("startDownload").addEventListener("click", async () => {
 });
 
 function setStatus(message) {
-    document.getElementById("status").textContent = message;
+    let statusBox = document.getElementById("status-area");
+    if (statusBox === null) {
+        statusBox = document.createElement("div");
+        statusBox.id = "status-area";
+        statusBox.className = "subsection";
+        statusBox.innerHTML = `<h3>Info</h3><p></p>`;
+        document.body.appendChild(statusBox);
+    }
+
+    statusBox.querySelector("p").textContent = message;
 }
 
 async function loadQueue() {
-    const { downloadQueue = [] } = await chrome.storage.local.get('downloadQueue');
+    const {downloadQueue = []} = await chrome.storage.local.get('downloadQueue');
     const list = document.getElementById("queueList");
 
     list.innerHTML = "";
@@ -67,6 +81,4 @@ async function loadQueue() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    await loadQueue();
-});
+document.addEventListener("DOMContentLoaded", loadQueue);
