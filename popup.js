@@ -82,3 +82,9 @@ async function loadQueue() {
 }
 
 document.addEventListener("DOMContentLoaded", loadQueue);
+
+chrome.runtime.onMessage.addListener(async (message) => {
+    if (message.action === "updatePopup") {
+        await loadQueue();
+    }
+});
